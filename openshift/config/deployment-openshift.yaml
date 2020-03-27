@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catapp
+  labels:
+    app: catapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catapp
+  template:
+    metadata:
+      labels:
+        app: catapp
+    spec:
+      containers:
+        - name: catapp
+          # This image will be overwritten by the update-deployment Task
+          image: catapp:latest
+          ports:
+            - containerPort: 3000
+              protocol: TCP

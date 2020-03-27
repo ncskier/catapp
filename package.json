@@ -1,0 +1,19 @@
+{
+  "name": "catapp",
+  "version": "1.0.0",
+  "description": "Nodejs demo app for running a cloud native Tekton Pipeline.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ncskier/catapp"
+  },
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "node": "^12.8.0"
+  }
+}
