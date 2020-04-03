@@ -9,5 +9,4 @@ spec:
     template:
       name: catapp-build-and-deploy
     bindings:
-    - name: pullrequest
-    - name: namespace
+    - name: catapp-build-and-deploy

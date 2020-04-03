@@ -83,3 +83,16 @@ Get the URL for your route with `oc get route catapp`, and open the route URL in
 
 If you would like to view the PipelineRun logs, then read [these instructions](https://github.com/tektoncd/pipeline/blob/master/docs/logs.md) from the Tekton Pipelines
 documentation.
+
+## Run the Trigger
+
+```bash
+curl -v \
+   -H 'X-GitHub-Event: pull_request' \
+   -H 'Content-Type: application/json' \
+   -d '{
+     "repository": {"url": "https://github.com/ncskier/catapp"},
+     "pull_request": {"head": {"sha": "master"}}
+   }' \
+   <YOUR_ROUTE_HOST>
+```
