@@ -16,8 +16,9 @@ spec:
     spec:
       containers:
         - name: catapp
+          # This image will be overwritten by the update-deployment Task
           image: catapp:latest
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
               protocol: TCP

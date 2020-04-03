@@ -14,10 +14,6 @@ node app.js
 Open [http://localhost:3000/](http://localhost:3000/) in your web browser to
 view the running app.
 
-## Build and run Nodejs app on Kubernetes using a cloud native Tekton Pipeline
+## Build and run CatApp app on OpenShift using a cloud native OpenShift Pipeline
 
 Follow the instructions in the [tekton/](tekton/README.md) directory.
-
-### OpenShift
-
-If you are using an OpenShift environment, then follow the instructions in the [openshift/tekton/](openshift/tekton/README.md) directory.

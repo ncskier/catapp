@@ -1,0 +1,45 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: build-and-deploy-openshift
+spec:
+  resources:
+  - name: source
+    type: git
+  - name: image
+    type: image
+  params:
+  - name: DEPLOYMENT
+    description: Name of the Deployment and the container name in the Deployment
+  - name: K8S_DIRECTORY_PATH
+    description: Path to the directory for kubectl apply -f
+    default: config/
+  tasks:
+  - name: build
+    taskRef:
+      name: buildah
+    resources:
+      inputs:
+      - name: source
+        resource: source
+      outputs:
+      - name: image
+        resource: image
+    params:
+    - name: TLSVERIFY
+      value: 'false'
+  - name: deploy
+    runAfter: [build]
+    taskRef:
+      name: deploy-openshift
+    resources:
+      inputs:
+      - name: source
+        resource: source
+      - name: image
+        resource: image
+    params:
+    - name: K8S_DIRECTORY_PATH
+      value: $(params.K8S_DIRECTORY_PATH)
+    - name: DEPLOYMENT
+      value: $(params.DEPLOYMENT)

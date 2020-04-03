@@ -1,0 +1,13 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: catapp
+spec:
+  serviceAccountName: default
+  triggers:
+  - name: pullrequest-build-and-deploy
+    template:
+      name: catapp-build-and-deploy
+    bindings:
+    - name: pullrequest
+    - name: namespace
