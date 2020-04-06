@@ -54,6 +54,7 @@ kind: PipelineRun
 metadata:
   name: catapp-build-and-deploy
 spec:
+  serviceAccountName: catapp
   pipelineRef:
     name: build-and-deploy-openshift
   resources:
@@ -87,12 +88,14 @@ documentation.
 ## Run the Trigger
 
 ```bash
+URL="https://github.com/catapp" # The URL of your fork of CatApp
+ROUTE_HOST=$(oc get route el-catapp --template='http://{{.spec.host}}')
 curl -v \
    -H 'X-GitHub-Event: pull_request' \
    -H 'Content-Type: application/json' \
    -d '{
-     "repository": {"url": "https://github.com/ncskier/catapp"},
+     "repository": {"url": "'"${URL}"'"},
      "pull_request": {"head": {"sha": "master"}}
    }' \
-   <YOUR_ROUTE_HOST>
+   ${ROUTE_HOST}
 ```
