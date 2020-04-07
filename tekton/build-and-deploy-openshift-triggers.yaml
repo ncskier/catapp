@@ -49,7 +49,7 @@ metadata:
 spec:
   params:
   - name: URL
-    value: $(body.repository.url)
+    value: $(body.repository.clone_url)
   - name: REVISION
     value: $(body.pull_request.head.sha)
   - name: NAMESPACE

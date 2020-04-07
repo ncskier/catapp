@@ -106,13 +106,13 @@ documentation.
 ## Run the Trigger
 
 ```bash
-URL="https://github.com/catapp" # The URL of your fork of CatApp
+URL="https://github.com/ncskier/catapp" # The URL of your fork of CatApp
 ROUTE_HOST=$(oc get route el-catapp --template='http://{{.spec.host}}')
 curl -v \
    -H 'X-GitHub-Event: pull_request' \
    -H 'Content-Type: application/json' \
    -d '{
-     "repository": {"url": "'"${URL}"'"},
+     "repository": {"clone_url": "'"${URL}"'"},
      "pull_request": {"head": {"sha": "master"}}
    }' \
    ${ROUTE_HOST}
