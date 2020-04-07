@@ -1,15 +1,3 @@
-# This Secret is only necessary if you are using a private git repository
-apiVersion: v1
-kind: Secret
-metadata:
-  name: github
-  annotations:
-    tekton.dev/git-0: https://github.com # Replace this if using GitHub Enterprise
-type: kubernetes.io/basic-auth
-stringData:
-  username: <username> # Replace with `echo -n '<username>' | base64`
-  password: <password> # Replace with `echo -n '<password>' | base64`
----
 # This Task is from the Tekton Catalog (last updated 04/02/18):
 # https://github.com/tektoncd/catalog/blob/master/buildah/buildah.yaml
 # This Task uses buildah to build and push an image.
