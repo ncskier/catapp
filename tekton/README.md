@@ -46,15 +46,33 @@ EOF
 
 Run the Pipeline by creating a PipelineRun resource such as the following:
 
+If you are using a private repository, then add a Secret for authentication:
 ```bash
-NAMESPACE=catapp
+cat << EOF | oc apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: git
+  annotations:
+    tekton.dev/git-0: https://github.com # Described below
+type: kubernetes.io/basic-auth
+stringData:
+  username: <username>
+  password: <password>
+EOF
+```
+Add the `git` Secret to your `pipeline` ServiceAccount
+
+```bash
+NAMESPACE='catapp'
+URL='https://github.com/ncskier/catapp.git' # Replace with your catapp repository url
 cat << EOF | oc apply -f -
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
   name: catapp-build-and-deploy
 spec:
-  serviceAccountName: catapp
+  serviceAccountName: pipeline
   pipelineRef:
     name: build-and-deploy-openshift
   resources:
@@ -63,9 +81,9 @@ spec:
       type: git
       params:
       - name: revision
-        value: triggers
+        value: master
       - name: url
-        value: https://github.com/ncskier/catapp
+        value: ${URL}
   - name: image
     resourceSpec:
       type: image

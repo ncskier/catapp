@@ -1,4 +1,4 @@
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: catapp-build-and-deploy
@@ -42,7 +42,7 @@ spec:
       - name: DEPLOYMENT
         value: $(params.DEPLOYMENT)
 ---
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
   name: catapp-build-and-deploy
@@ -72,7 +72,7 @@ metadata:
   name: catapp
 rules:
 # Permissions for every EventListener deployment to function
-- apiGroups: ["triggers.tekton.dev"]
+- apiGroups: ["tekton.dev"]
   resources: ["eventlisteners", "triggerbindings", "triggertemplates"]
   verbs: ["get"]
 - apiGroups: [""]
@@ -96,7 +96,7 @@ roleRef:
   kind: Role
   name: catapp
 ---
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1alpha1
 kind: EventListener
 metadata:
   name: catapp

@@ -72,19 +72,19 @@ spec:
 ---
 # This Task applies Kubernetes resource files with oc apply -f. Then it updates
 # the target Deployment image.
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
   name: deploy-openshift
 spec:
-  params:
-  - name: K8S_DIRECTORY_PATH
-    description: Path to the directory for oc apply -f
-    default: config/
-  - name: DEPLOYMENT
-    description: Name of the Deployment and the container name in the Deployment
-  resources:
-    inputs:
+  inputs:
+    params:
+    - name: K8S_DIRECTORY_PATH
+      description: Path to the directory for oc apply -f
+      default: config/
+    - name: DEPLOYMENT
+      description: Name of the Deployment and the container name in the Deployment
+    resources:
     - name: source
       type: git
     - name: image
