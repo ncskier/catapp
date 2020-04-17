@@ -37,7 +37,7 @@ spec:
           type: image
           params:
           - name: url
-            value: image-registry.openshift-image-registry.svc:5000/$(params.NAMESPACE)/catapp:latest
+            value: image-registry.openshift-image-registry.svc:5000/$(params.NAMESPACE)/catapp:$(params.REVISION)
       params:
       - name: DEPLOYMENT
         value: $(params.DEPLOYMENT)
