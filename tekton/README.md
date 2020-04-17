@@ -68,7 +68,7 @@ NAMESPACE='catapp'
 URL='https://github.com/ncskier/catapp.git' # Replace with your catapp repository url
 REVISION='master'
 cat << EOF | oc apply -f -
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
   name: catapp-build-and-deploy
