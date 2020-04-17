@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: catapp-build-and-deploy
@@ -15,7 +15,7 @@ spec:
   - name: SERVICE_ACCOUNT
     description: The ServiceAccount under which to run the Pipeline.
   resourcetemplates:
-  - apiVersion: tekton.dev/v1alpha1
+  - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata:
       generateName: catapp-build-and-deploy-
@@ -37,12 +37,12 @@ spec:
           type: image
           params:
           - name: url
-            value: image-registry.openshift-image-registry.svc:5000/$(params.NAMESPACE)/catapp:latest
+            value: image-registry.openshift-image-registry.svc:5000/$(params.NAMESPACE)/catapp:$(params.REVISION)
       params:
       - name: DEPLOYMENT
         value: $(params.DEPLOYMENT)
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
   name: catapp-build-and-deploy
@@ -70,7 +70,7 @@ metadata:
   name: catapp
 rules:
 # Permissions for every EventListener deployment to function
-- apiGroups: ["tekton.dev"]
+- apiGroups: ["triggers.tekton.dev"]
   resources: ["eventlisteners", "triggerbindings", "triggertemplates"]
   verbs: ["get"]
 - apiGroups: [""]
@@ -93,7 +93,7 @@ roleRef:
   kind: Role
   name: catapp
 ---
-apiVersion: tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
   name: catapp

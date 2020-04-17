@@ -66,8 +66,9 @@ Add the `git` Secret to your `pipeline` ServiceAccount
 ```bash
 NAMESPACE='catapp'
 URL='https://github.com/ncskier/catapp.git' # Replace with your catapp repository url
+REVISION='master'
 cat << EOF | oc apply -f -
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   name: catapp-build-and-deploy
@@ -81,7 +82,7 @@ spec:
       type: git
       params:
       - name: revision
-        value: master
+        value: ${REVISION}
       - name: url
         value: ${URL}
   - name: image
@@ -89,7 +90,7 @@ spec:
       type: image
       params:
       - name: url
-        value: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/catapp:latest
+        value: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/catapp:${REVISION}
   params:
   - name: DEPLOYMENT
     value: catapp

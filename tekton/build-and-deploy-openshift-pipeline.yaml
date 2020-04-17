@@ -1,35 +1,33 @@
 # This Task is from the Tekton Catalog (last updated 04/02/18):
 # https://github.com/tektoncd/catalog/blob/master/buildah/buildah.yaml
 # This Task uses buildah to build and push an image.
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: buildah
 spec:
-  inputs:
-    params:
-    - name: BUILDER_IMAGE
-      description: The location of the buildah builder image.
-      default: quay.io/buildah/stable:v1.11.0
-    - name: DOCKERFILE
-      description: Path to the Dockerfile to build.
-      default: ./Dockerfile
-    - name: CONTEXT
-      description: Path to the directory to use as context.
-      default: .
-    - name: TLSVERIFY
-      description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
-      default: "true"
-    - name: FORMAT
-      description: The format of the built container, oci or docker
-      default: "oci"
+  params:
+  - name: BUILDER_IMAGE
+    description: The location of the buildah builder image.
+    default: quay.io/buildah/stable:v1.11.0
+  - name: DOCKERFILE
+    description: Path to the Dockerfile to build.
+    default: ./Dockerfile
+  - name: CONTEXT
+    description: Path to the directory to use as context.
+    default: .
+  - name: TLSVERIFY
+    description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+    default: "true"
+  - name: FORMAT
+    description: The format of the built container, oci or docker
+    default: "oci"
 
-    resources:
+  resources:
+    inputs:
     - name: source
       type: git
-
-  outputs:
-    resources:
+    outputs:
     - name: image
       type: image
 
@@ -60,19 +58,19 @@ spec:
 ---
 # This Task applies Kubernetes resource files with oc apply -f. Then it updates
 # the target Deployment image.
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: deploy-openshift
 spec:
-  inputs:
-    params:
-    - name: K8S_DIRECTORY_PATH
-      description: Path to the directory for oc apply -f
-      default: config/
-    - name: DEPLOYMENT
-      description: Name of the Deployment and the container name in the Deployment
-    resources:
+  params:
+  - name: K8S_DIRECTORY_PATH
+    description: Path to the directory for oc apply -f
+    default: config/
+  - name: DEPLOYMENT
+    description: Name of the Deployment and the container name in the Deployment
+  resources:
+    inputs:
     - name: source
       type: git
     - name: image
@@ -98,7 +96,7 @@ spec:
       }}}}'
 ---
 # This Pipeline builds and deploys an image on OpenShift.
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: build-and-deploy-openshift
