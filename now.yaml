@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: catapp-build-and-deploy
+spec:
+  serviceAccountName: pipeline
+  pipelineRef:
+    name: build-and-deploy-openshift
+  resources:
+  - name: source
+    resourceSpec:
+      type: git
+      params:
+      - name: revision
+        value: master
+      - name: url
+        value: "https://github.com/taylorgrahamedb/catapp"
+  - name: image
+    resourceSpec:
+      type: image
+      params:
+      - name: url
+        value: image-registry.openshift-image-registry.svc:5000/catapp/catapp:master
+  params:
+  - name: DEPLOYMENT
+    value: catapp
