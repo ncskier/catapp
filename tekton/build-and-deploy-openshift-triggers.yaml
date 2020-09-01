@@ -10,7 +10,7 @@ spec:
     description: The revision to build and deploy.
   - name: NAMESPACE
     description: The namespace is used by OpenShift's internal image registry to store the built image.
-  - name: DEPLOYMENT
+  - name: DEPLOYMEND
     description: Name of the Deployment and the container name in the Deployment.
   - name: SERVICE_ACCOUNT
     description: The ServiceAccount under which to run the Pipeline.
