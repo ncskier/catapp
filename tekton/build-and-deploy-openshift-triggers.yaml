@@ -57,7 +57,7 @@ spec:
     - name: DEPLOYMENT
       value: catapp
     - name: SERVICE_ACCOUNT
-      value: pipeline
+      value: catapp
 ---
 apiVersion: v1
 kind: ServiceAccount
