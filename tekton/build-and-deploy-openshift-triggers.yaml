@@ -4,43 +4,43 @@ metadata:
   name: catapp-build-and-deploy
 spec:
   params:
-  - name: URL
-    description: The repository url to build and deploy.
-  - name: REVISION
-    description: The revision to build and deploy.
-  - name: NAMESPACE
-    description: The namespace is used by OpenShift's internal image registry to store the built image.
-  - name: DEPLOYMENT
-    description: Name of the Deployment and the container name in the Deployment.
-  - name: SERVICE_ACCOUNT
-    description: The ServiceAccount under which to run the Pipeline.
+    - name: URL
+      description: The repository url to build and deploy.
+    - name: REVISION
+      description: The revision to build and deploy.
+    - name: NAMESPACE
+      description: The namespace is used by OpenShift's internal image registry to store the built image.
+    - name: DEPLOYMENT
+      description: Name of the Deployment and the container name in the Deployment.
+    - name: SERVICE_ACCOUNT
+      description: The ServiceAccount under which to run the Pipeline.
   resourcetemplates:
-  - apiVersion: tekton.dev/v1beta1
-    kind: PipelineRun
-    metadata:
-      generateName: catapp-build-and-deploy-
-    spec:
-      serviceAccountName: $(params.SERVICE_ACCOUNT)
-      pipelineRef:
-        name: build-and-deploy-openshift
-      resources:
-      - name: source
-        resourceSpec:
-          type: git
-          params:
-          - name: revision
-            value: $(params.REVISION)
-          - name: url
-            value: $(params.URL)
-      - name: image
-        resourceSpec:
-          type: image
-          params:
-          - name: url
-            value: image-registry.openshift-image-registry.svc:5000/$(params.NAMESPACE)/catapp:$(params.REVISION)
-      params:
-      - name: DEPLOYMENT
-        value: $(params.DEPLOYMENT)
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: catapp-build-and-deploy-
+      spec:
+        serviceAccountName: $(params.SERVICE_ACCOUNT)
+        pipelineRef:
+          name: build-and-deploy-openshift
+        resources:
+          - name: source
+            resourceSpec:
+              type: git
+              params:
+                - name: revision
+                  value: $(params.REVISION)
+                - name: url
+                  value: $(params.URL)
+          - name: image
+            resourceSpec:
+              type: image
+              params:
+                - name: url
+                  value: image-registry.openshift-image-registry.svc:5000/$(params.NAMESPACE)/catapp:$(params.REVISION)
+        params:
+          - name: DEPLOYMENT
+            value: $(params.DEPLOYMENT)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -48,16 +48,16 @@ metadata:
   name: catapp-build-and-deploy
 spec:
   params:
-  - name: URL
-    value: $(body.repository.clone_url)
-  - name: REVISION
-    value: $(body.pull_request.head.sha)
-  - name: NAMESPACE
-    value: catapp
-  - name: DEPLOYMENT
-    value: catapp
-  - name: SERVICE_ACCOUNT
-    value: pipeline
+    - name: URL
+      value: $(body.repository.clone_url)
+    - name: REVISION
+      value: $(body.pull_request.head.sha)
+    - name: NAMESPACE
+      value: esvirskiy
+    - name: DEPLOYMENT
+      value: catapp
+    - name: SERVICE_ACCOUNT
+      value: pipeline
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -69,25 +69,25 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: catapp
 rules:
-# Permissions for every EventListener deployment to function
-- apiGroups: ["triggers.tekton.dev"]
-  resources: ["eventlisteners", "triggerbindings", "triggertemplates"]
-  verbs: ["get"]
-- apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["get", "list", "watch"]
-# Permissions to create resources in associated TriggerTemplates
-- apiGroups: ["tekton.dev"]
-  resources: ["pipelineruns"]
-  verbs: ["create"]
+  # Permissions for every EventListener deployment to function
+  - apiGroups: ["triggers.tekton.dev"]
+    resources: ["eventlisteners", "triggerbindings", "triggertemplates"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]
+  # Permissions to create resources in associated TriggerTemplates
+  - apiGroups: ["tekton.dev"]
+    resources: ["pipelineruns"]
+    verbs: ["create"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: catapp
 subjects:
-- kind: ServiceAccount
-  name: catapp
+  - kind: ServiceAccount
+    name: catapp
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -100,11 +100,11 @@ metadata:
 spec:
   serviceAccountName: catapp
   triggers:
-  - name: pullrequest-build-and-deploy
-    template:
-      name: catapp-build-and-deploy
-    bindings:
-    - name: catapp-build-and-deploy
+    - name: pullrequest-build-and-deploy
+      template:
+        name: catapp-build-and-deploy
+      bindings:
+        - name: catapp-build-and-deploy
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
