@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: repro-pr-pr
+  namespace: default
+spec:
+  params:
+    - name: url
+      value: https://github.com/esvirskiy/catapp
+  secrets:
+    - fieldName: authToken
+      secretKey: secretToken
+      secretName: github-secret
+  type: pullRequest
