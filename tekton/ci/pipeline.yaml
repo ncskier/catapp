@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: git-admission-control
+spec:
+  params:
+    - name: event-body
+  resources:
+    - name: pull-request
+      type: pullRequest
+    - name: policy-repo
+      type: git
+  tasks:
+    - name: setstatus-inprogress
+      taskRef:
+        name: set-status
+      resources:
+        inputs:
+          - name: pr
+            resource: pull-request
+        outputs:
+          - name: pr
+            resource: pull-request
+      params:
+        - name: status
+          value: "pending"
