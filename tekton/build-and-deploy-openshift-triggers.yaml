@@ -23,6 +23,7 @@ spec:
         serviceAccountName: $(params.SERVICE_ACCOUNT)
         pipelineRef:
           name: build-and-deploy-openshift
+        taskRef: github-set-status
         resources:
           - name: source
             resourceSpec:
