@@ -1,0 +1,10 @@
+URL="https://github.com/SionArtingstall/catapp" # The URL of your fork of CatApp
+ROUTE_HOST=$(oc get route el-catapp --template='http://{{.spec.host}}')
+curl -v \
+   -H 'X-GitHub-Event: pull_request' \
+   -H 'Content-Type: application/json' \
+   -d '{
+     "repository": {"clone_url": "'"${URL}"'"},
+     "pull_request": {"head": {"sha": "master"}}
+   }' \
+   ${ROUTE_HOST}

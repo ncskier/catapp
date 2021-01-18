@@ -1,0 +1,31 @@
+NAMESPACE='tekton-pipeline-tutorial'
+URL='https://github.com/SionArtingstall/catapp.git' # Replace with your catapp repository url
+REVISION='master'
+cat << EOF | oc apply -f -
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: catapp-build-and-deploy
+spec:
+  serviceAccountName: pipeline
+  pipelineRef:
+    name: build-and-deploy-openshift
+  resources:
+  - name: source
+    resourceSpec:
+      type: git
+      params:
+      - name: revision
+        value: ${REVISION}
+      - name: url
+        value: ${URL}
+  - name: image
+    resourceSpec:
+      type: image
+      params:
+      - name: url
+        value: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/catapp:${REVISION}
+  params:
+  - name: DEPLOYMENT
+    value: catapp
+EOF

@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>CatApp</title>
-  <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/tektoncd/dashboard/master/src/images/favicon.png" />
+  <title>KittiesApp</title>
+  <link rel="shortcut icon" type="image/png"
+    href="https://raw.githubusercontent.com/tektoncd/dashboard/master/src/images/favicon.png" />
 </head>
+
 <body>
   <button id="getCatImageButton" class="center" type="button">Click Me! 🐱</button>
   <div id="catImageContainer">
     <img id="catImage" class="center" alt="A random image of a cat." />
   </div>
-  <p class="footnote">Images are from <a href="https://thecatapi.com/" rel="noopener noreferrer" target="_blank">TheCatAPI</a>.</p>
+  <p class="footnote">Images are from <a href="https://thecatapi.com/" rel="noopener noreferrer"
+      target="_blank">TheCatAPI</a>.</p>
 </body>
 
 <style>
@@ -48,7 +52,7 @@
 
   function requestCatImage() {
     httpRequest = new XMLHttpRequest();
-    httpRequest.onreadystatechange = function() {
+    httpRequest.onreadystatechange = function () {
       // Process the server response here.
       if (httpRequest.readyState === XMLHttpRequest.DONE) {
         if (httpRequest.status === 200) {
@@ -64,4 +68,5 @@
     httpRequest.send();
   }
 </script>
+
 </html>
