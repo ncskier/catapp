@@ -90,7 +90,7 @@ subjects:
   name: catapp
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: catapp
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
@@ -104,7 +104,7 @@ spec:
     template:
       name: catapp-build-and-deploy
     bindings:
-    - name: catapp-build-and-deploy
+    - ref: catapp-build-and-deploy
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
