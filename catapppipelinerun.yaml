@@ -12,15 +12,15 @@ spec:
       type: git
       params:
       - name: revision
-        value: ${REVISION}
+        value: master
       - name: url
-        value: ${URL}
+        value: https://github.com/avgent/catapp.git
   - name: image
     resourceSpec:
       type: image
       params:
       - name: url
-        value: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/catapp:${REVISION}
+        value: image-registry.openshift-image-registry.svc:5000/catapp/catapp:master
   params:
   - name: DEPLOYMENT
     value: catapp
