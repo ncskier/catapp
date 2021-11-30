@@ -69,25 +69,25 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: catapp
 rules:
-# Permissions for every EventListener deployment to function
-- apiGroups: ["triggers.tekton.dev"]
-  resources: ["eventlisteners", "triggerbindings", "triggertemplates"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["get", "list", "watch"]
-# Permissions to create resources in associated TriggerTemplates
-- apiGroups: ["tekton.dev"]
-  resources: ["pipelineruns"]
-  verbs: ["create"]
+  # Permissions for every EventListener deployment to function
+  - apiGroups: ["triggers.tekton.dev"]
+    resources: ["eventlisteners", "triggerbindings", "triggertemplates"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]
+  # Permissions to create resources in associated TriggerTemplates
+  - apiGroups: ["tekton.dev"]
+    resources: ["pipelineruns"]
+    verbs: ["create"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: catapp
 subjects:
-- kind: ServiceAccount
-  name: catapp
+  - kind: ServiceAccount
+    name: catapp
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
