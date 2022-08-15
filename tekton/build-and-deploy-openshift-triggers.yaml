@@ -20,7 +20,7 @@ spec:
     metadata:
       generateName: catapp-build-and-deploy-
     spec:
-      serviceAccountName: $(params.SERVICE_ACCOUNT)
+      serviceAccountName: $(tt.params.SERVICE_ACCOUNT)
       pipelineRef:
         name: build-and-deploy-openshift
       resources:
@@ -29,18 +29,18 @@ spec:
           type: git
           params:
           - name: revision
-            value: $(params.REVISION)
+            value: $(tt.params.REVISION)
           - name: url
-            value: $(params.URL)
+            value: $(tt.params.URL)
       - name: image
         resourceSpec:
           type: image
           params:
           - name: url
-            value: image-registry.openshift-image-registry.svc:5000/$(params.NAMESPACE)/catapp:$(params.REVISION)
+            value: image-registry.openshift-image-registry.svc:5000/$(tt.params.NAMESPACE)/catapp:$(tt.params.REVISION)
       params:
       - name: DEPLOYMENT
-        value: $(params.DEPLOYMENT)
+        value: $(tt.params.DEPLOYMENT)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -64,33 +64,33 @@ kind: ServiceAccount
 metadata:
   name: catapp
 ---
-kind: Role
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: catapp
 rules:
-# Permissions for every EventListener deployment to function
-- apiGroups: ["triggers.tekton.dev"]
-  resources: ["eventlisteners", "triggerbindings", "triggertemplates"]
-  verbs: ["get"]
-- apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["get", "list", "watch"]
-# Permissions to create resources in associated TriggerTemplates
-- apiGroups: ["tekton.dev"]
-  resources: ["pipelineruns"]
-  verbs: ["create"]
+  # Permissions for every EventListener deployment to function
+  - apiGroups: ["triggers.tekton.dev"]
+    resources: ["eventlisteners", "triggerbindings", "triggertemplates", "triggers"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]
+  # Permissions to create resources in associated TriggerTemplates
+  - apiGroups: ["tekton.dev"]
+    resources: ["pipelineruns"]
+    verbs: ["create"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: catapp
 subjects:
-- kind: ServiceAccount
-  name: catapp
+  - kind: ServiceAccount
+    name: catapp
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: catapp
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
@@ -102,9 +102,9 @@ spec:
   triggers:
   - name: pullrequest-build-and-deploy
     template:
-      name: catapp-build-and-deploy
+      ref: catapp-build-and-deploy
     bindings:
-    - name: catapp-build-and-deploy
+      - ref: catapp-build-and-deploy
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
